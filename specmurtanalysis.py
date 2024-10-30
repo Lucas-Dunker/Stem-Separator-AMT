@@ -4,15 +4,6 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Compute Constant-Q Transform
-def compute_cqt(y, sr):
-    # Compute the CQT (with default bins per octave = 12)
-    C = librosa.cqt(y, sr=sr)
-    # Convert the CQT to decibels for better visualization
-    C_dB = librosa.amplitude_to_db(np.abs(C), ref=np.max)
-    return C_dB
-
-
 def get_harmonic_templates(cqt_frequencies, minimum_fequency, maximum_frequency, num_harmonics, bins_p_octave):
     # Define the range of fundamental frequencies based on musical notes within min_freq and max_freq
     num_notes = int(np.log2(maximum_frequency / minimum_fequency) * bins_p_octave)
@@ -43,7 +34,7 @@ def specmurt_analyis(cqt_frequencies, minimum_fequency, maximum_frequency, num_h
 
     for i, template in enumerate(harmonic_templates):
         # apply the convolution
-        specmurt[i, :] = np.apply_along_axis(lambda x: np.correlate(x, template, mode='same'), axis=0, arr=C_dB)
+         specmurt[i, :] = np.correlate(C_dB[i, :], template, mode='same')
 
 
     return specmurt
