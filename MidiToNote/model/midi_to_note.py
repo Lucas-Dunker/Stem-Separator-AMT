@@ -1,34 +1,63 @@
 import subprocess
 import shutil
-import os
+from pathlib import Path
 
 
-def midi_to_pdf(midi_file, pdf_file):
+class MidiToPdfConverter:
+    def __init__(self, musescore_path="MuseScore4.exe"):
+        self.musescore_path = musescore_path
+        self._validate_musescore()
 
-    mscore_executable = "MuseScore4.exe"
-    # we can change this implementation later to use an api
-    # I'll just create a docker container with a simple flask route that takes a midi file and returns a pdf file
-    # it'll also contain the MuseScore executable
+    def _validate_musescore(self):
+        """Validate that MuseScore is accessible
+        The user needs to have MuseScore installed and added to their PATH"""
+        # we can change this to have it run in a docker container with musescore installed
+        if not shutil.which(self.musescore_path):
+            raise FileNotFoundError(
+                f"'{self.musescore_path}' not found in PATH. Please ensure MuseScore is installed and added to PATH."
+            )
 
-    # check if MuseScore is accessible
-    if not shutil.which(mscore_executable):
-        raise FileNotFoundError(
-            f"'{mscore_executable}' not found in PATH. Please ensure MuseScore is installed and added to PATH."
-        )
+    def convert(self, midi_path, output_path, create_dirs=True):
+        """
+        Convert MIDI file to PDF
 
-    if not os.path.isfile(midi_file):
-        raise FileNotFoundError(f"MIDI file not found at '{midi_file}'")
+        Args:
+            midi_path: Path to input MIDI file (str or Path)
+            output_path: Path for output PDF file (str or Path)
+            create_dirs: Whether to create output directories if they don't exist
 
-    command = [mscore_executable, midi_file, "-o", pdf_file]
+        Returns:
+            bool: True if conversion was successful, False otherwise
+        """
+        midi_path = Path(midi_path)
+        output_path = Path(output_path)
 
-    try:
-        subprocess.run(command, check=True)
-        print(f"Successfully converted '{midi_file}' to '{pdf_file}'")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred during conversion: {e}")
+        if not midi_path.is_file():
+            raise FileNotFoundError(f"MIDI file not found at '{midi_path}'")
+
+        # if create_dirs:
+        #     output_path.parent.mkdir(parents=True, exist_ok=True) // might get rid of this not really necessary
+
+        command = [self.musescore_path, str(midi_path), "-o", str(output_path)]
+
+        try:
+            subprocess.run(command, check=True, capture_output=True)
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"Conversion error: {e}")
+            return False
 
 
-midi_file = os.path.abspath("../data/input/o-christmas-tree.mid")
-output_dir = os.path.abspath("../data/output")
-pdf_file = os.path.join(output_dir, "o-christmas-tree.pdf")
-midi_to_pdf(midi_file, pdf_file)
+# this is just an example of how it would be plugged into the main pipeline
+def process_midi_to_pdf(input_midi, output_pdf):
+    converter = MidiToPdfConverter()
+    return converter.convert(input_midi, output_pdf)
+
+
+if __name__ == "__main__":
+    input_file = Path("../data/input/o-christmas-tree.mid")
+    output_file = Path("../data/output/o-christmas-tree.pdf")
+
+    success = process_midi_to_pdf(input_file, output_file)
+    if success:
+        print(f"Converted MIDI to PDF notation {input_file} to {output_file}")
