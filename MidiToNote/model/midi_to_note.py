@@ -35,8 +35,6 @@ class MidiToPdfConverter:
         if not midi_path.is_file():
             raise FileNotFoundError(f"MIDI file not found at '{midi_path}'")
 
-    
-
         command = [self.musescore_path, str(midi_path), "-o", str(output_path)]
 
         try:
@@ -45,18 +43,3 @@ class MidiToPdfConverter:
         except subprocess.CalledProcessError as e:
             print(f"Conversion error: {e}")
             return False
-
-
-# this is just an example of how it would be plugged into the main pipeline
-def process_midi_to_pdf(input_midi, output_pdf):
-    converter = MidiToPdfConverter()
-    return converter.convert(input_midi, output_pdf)
-
-
-if __name__ == "__main__":
-    input_file = Path("../data/input/o-christmas-tree.mid")
-    output_file = Path("../data/output/o-christmas-tree.pdf")
-
-    success = process_midi_to_pdf(input_file, output_file)
-    if success:
-        print(f"Converted MIDI to PDF notation {input_file} to {output_file}")
