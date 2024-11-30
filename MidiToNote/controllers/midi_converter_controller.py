@@ -50,26 +50,3 @@ class MidiConverterController:
         except Exception as e:
             print(f"Error during conversion: {e}")
             return False
-
-    # def batch_convert(
-    #     self, input_files: list[str | Path], output_dir: str | Path
-    # ) -> dict[str, bool]:
-    #     """
-    #     Convert multiple MIDI files to PDF
-
-    #     Args:
-    #         input_files: List of input MIDI file paths
-    #         output_dir: Directory for output PDF files
-
-    #     Returns:
-    #         dict: Dictionary mapping input files to conversion success status
-    #     """
-    #     output_dir = Path(output_dir)
-    #     results = {}
-
-    #     for input_file in input_files:
-    #         input_path = Path(input_file)
-    #         output_path = output_dir / f"{input_path.stem}.pdf"
-    #         results[str(input_path)] = self.convert_midi_to_pdf(input_path, output_path)
-
-    #     return results
