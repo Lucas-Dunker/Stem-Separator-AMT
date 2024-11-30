@@ -17,7 +17,7 @@ class MidiToPdfConverter:
                 f"'{self.musescore_path}' not found in PATH. Please ensure MuseScore is installed and added to PATH."
             )
 
-    def convert(self, midi_path, output_path, create_dirs=True):
+    def convert(self, midi_path, output_path):
         """
         Convert MIDI file to PDF
 
@@ -35,8 +35,7 @@ class MidiToPdfConverter:
         if not midi_path.is_file():
             raise FileNotFoundError(f"MIDI file not found at '{midi_path}'")
 
-        # if create_dirs:
-        #     output_path.parent.mkdir(parents=True, exist_ok=True) // might get rid of this not really necessary
+    
 
         command = [self.musescore_path, str(midi_path), "-o", str(output_path)]
 
