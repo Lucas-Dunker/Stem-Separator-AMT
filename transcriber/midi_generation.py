@@ -2,6 +2,9 @@ import pretty_midi
 import numpy as np
 import tensorflow as tf
 from transcriber import MusicTranscriber
+import os
+from IPython.display import Audio, display
+
 print("TensorFlow version:", tf.__version__)
 
 transcriber = MusicTranscriber()
@@ -46,26 +49,39 @@ def piano_roll_to_midi(piano_roll, fs=43.06, program=0, velocity=100):
         note = pretty_midi.Note(velocity=velocity, pitch=pitch + 21, start=start_time, end=end_time)
         instrument.notes.append(note)
     
-    # Add the instrument to the PrettyMIDI object
     midi.instruments.append(instrument)
     
     return midi
 
-cqt = transcriber.process_audio("Data/gdrive/Track002.wav")  # Shape: (84, time_steps)
-cqt = np.expand_dims(cqt, axis=-1)  # Add channel dimension, Shape: (84, time_steps, 1)
+audio_file =  'Data/gdrive/Track002.wav'
+cqt = transcriber.process_audio(audio_file)  
+
+cqt = np.expand_dims(cqt, axis=-1) 
 
 # Segment the input into slices of length 512
 segments = segment_features(cqt, segment_length=512, hop_length=256) 
 
 # Load the model
-model_path = 'transcriber\model\piano_transcriberF1.keras'
+model_path = 'transcriber/models/piano_transcriberF1.keras'
 model = tf.keras.models.load_model(model_path, compile=False)
 
-# Predict for each segment (batch input is expected)
-predictions = model.predict(segments)  # Shape: (num_segm,ents, time_steps, n_pitches)
 
-piano_roll = np.concatenate(predictions, axis=0)  # Combine time steps across all segments, shape: (full_time_steps, n_pitches)
+predictions = model.predict(segments)  
+
+piano_roll = np.concatenate(predictions, axis=0)  
 
 midi = piano_roll_to_midi(piano_roll, fs=43.06)
 midi.write('output.midi')
 
+
+output_folder = "output_midi"
+os.makedirs(output_folder, exist_ok=True)
+output_path = os.path.join(output_folder, "output.midi")
+midi.write(output_path)
+
+print(f"MIDI file saved to {output_path}")
+
+from IPython.display import Audio
+print(f"Generated MIDI file: {output_path}")
+
+display(Audio("output_midi/output.midi", autoplay=True))
