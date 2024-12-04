@@ -1,8 +1,10 @@
 # Imports and Setup
 from common import utils
 import torch
+from StemSeparationModel import StemSeparationModel
 
-DEVICE = 'cuda' if torch.cuda.is_available() else 'mps' if torch.mps.is_available() else 'cpu'
+# Whether to train the model or load a pre-trained model
+TRAIN_MODEL = False
 
 if __name__ == '__main__':
 
@@ -22,14 +24,16 @@ if __name__ == '__main__':
     EPOCH_LENGTH = 10
 
     model.verbose = False
-
     utils.logger()
 
-    trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, val_dataloader)
+    if (TRAIN_MODEL):
+        trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, val_dataloader)
 
     # Alternatively, you can load a pre-trained model
-    checkpoint_path = "checkpoints/200-epochs/best.model.pth"
-    # model = torch.load(checkpoint_path, weights_only=False, map_location=DEVICE)
+    checkpoint_path = "stem-separation/checkpoints/200-epochs/best.model.pth"
+
+    if not TRAIN_MODEL:
+        model = torch.load(checkpoint_path, weights_only=False)
 
 
     # Deploy Model
@@ -41,4 +45,4 @@ if __name__ == '__main__':
     from StemSeparationEvaluation import evaluateModel
     NUM_EVALUATION_ITEMS = len(test_data)
 
-    evaluation_df = evaluateModel(model, test_data, NUM_EVALUATION_ITEMS, "checkpoints/eval_df.csv")
+    evaluation_df = evaluateModel(model, test_data, NUM_EVALUATION_ITEMS, "stem-separation/checkpoints/eval_df.csv")
