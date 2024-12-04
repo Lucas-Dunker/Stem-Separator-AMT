@@ -6,9 +6,18 @@ import nussl
 
 from StemSeparationDeployment import process_audio
 
-METRICS = ["SI-SDR", "SI-SIR", "SI-SAR", "SD-SDR", "SNR", "SRR", "SI-SDRi", "SD-SDRi", "SNRi", "MIX-SI-SDR", "MIX-SD-SDR", "MIX-SNR"]
-
 def get_scores(model, item):
+    """
+    Evaluate our model for a specific audio item and return the evaluation metrics for the vocals and accompaniment
+
+    Args:
+    model: the model to evaluate
+    item: the specific audio data to evaluate
+
+    Returns:
+    scores: a dictionary containing the evaluation metrics for the vocals and accompaniment
+    """ 
+
     vocals_estimate_audio = process_audio(item, model)
     estimates = {
         "vocals": vocals_estimate_audio,
@@ -32,6 +41,20 @@ def get_scores(model, item):
     return scores
 
 def evaluateModel(model, data, num_items, eval_path):
+    """
+    Evaluate our model's performance with the given array of audio data, formatting and saving the resulting metrics
+    to a .csv file on disk.
+
+    Args:
+    model: the model to evaluate
+    item: the specific audio data to evaluate
+
+    Returns:
+    scores: a dictionary containing the evaluation metrics for the vocals and accompaniment
+    """ 
+    
+    METRICS = ["SI-SDR", "SI-SIR", "SI-SAR", "SD-SDR", "SNR", "SRR", "SI-SDRi", "SD-SDRi",
+                "SNRi", "MIX-SI-SDR", "MIX-SD-SDR", "MIX-SNR"]
     vocals_metrics, accompaniment_metrics = defaultdict(list), defaultdict(list)
 
     for i in range(num_items):
@@ -42,7 +65,8 @@ def evaluateModel(model, data, num_items, eval_path):
             vocals_metrics[metric].extend(scores["vocals"][metric])
             accompaniment_metrics[metric].extend(scores["accompaniment"][metric])
     
-    df = pd.DataFrame(columns=["Metric", "Vocals Mean", "Vocals Standard Deviation", "Accompaniment Mean", "Accompaniment Standard Deviation"])
+    df = pd.DataFrame(columns=["Metric", "Vocals Mean", "Vocals Standard Deviation", 
+                               "Accompaniment Mean", "Accompaniment Standard Deviation"])
     for metric in METRICS:
         metric_row = {
             "Metric": metric,

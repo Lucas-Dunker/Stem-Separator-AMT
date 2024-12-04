@@ -16,6 +16,24 @@ from StemSeparationModel import StemSeparationModel
 DEVICE = 'cuda' if torch.cuda.is_available() else 'mps' if torch.mps.is_available() else 'cpu'
 
 def prepareModel(train_folder, val_folder, test_folder):
+    """
+    Load in our audio dataset (music separated into 'bass', 'drums', 'vocals', and 'other' components), 
+    set up our model, and prepare our training, validation, and test data.
+
+    Args:
+    train_folder: the file path containing the training data
+    val_folder: the file path containing the validation data
+    test_folder: the file path containing the test data
+
+    Returns:
+    model: a newly initialized model following the StemSeparationModel class
+    train_data: the training data for the model
+    train_dataloader: the training dataloader for the model
+    val_dataloader: the validation dataloader for the model
+    test_data: the test data for the model
+    """ 
+        
+    # TODO - change training set to a larger amount of the MUSDB18 dataset
     data.prepare_musdb('~/.nussl/tutorial/')
 
     stft_params = nussl.STFTParams(window_length=512, hop_length=128, window_type='sqrt_hann')
@@ -79,6 +97,19 @@ def prepareModel(train_folder, val_folder, test_folder):
 
 
 def trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, val_dataloader):
+    """
+    Train the given model for a specified number of epochs and batch size with the given training and validation data.
+
+    Args:
+    model: the model to train
+    NUM_EPOCHS: the number of epochs to train the model
+    EPOCH_LENGTH: the number of batches per epoch
+    train_data: the training data for the model
+    train_dataloader: the training dataloader for the model
+    val_dataloader: the validation dataloader for the model
+    """ 
+
+    # TODO - tweak our training step to improve performance and accuracy (epochs, learning rate, loss function, etc.)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     loss_fn = nussl.ml.train.loss.L1Loss()
 
@@ -137,14 +168,14 @@ def trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, va
     def close_pbar(engine):
         engine.state.pbar.close()
 
-    # We'll save the output relative to this notebook.
+    # Save the output relative to this notebook
     output_folder = Path('.').absolute()
 
     # Adding handlers from nussl that print out details about model training
-    # run the validation step, and save the models.
     nussl.ml.train.add_stdout_handler(trainer, validator)
     nussl.ml.train.add_validate_and_checkpoint(output_folder, model, optimizer, train_data, trainer, val_dataloader, validator)
 
+    # Run the validation step and save the models
     trainer.run(
         train_dataloader,
         epoch_length=EPOCH_LENGTH,

@@ -7,7 +7,17 @@ import scipy.io.wavfile
 DEVICE = 'cuda' if torch.cuda.is_available() else 'mps' if torch.mps.is_available() else 'cpu'
 
 
-def process_audio(item, model):    
+def process_audio(item, model):
+    """
+    Process audio data using the given model, returning audio of only the estimated filtered vocal data.
+
+    Args:
+    item: the audio data (in numpy array format, following our test data) to process
+    model: the model to use for processing the audio data
+
+    Returns:
+    vocals_estimate_audio: The given model's estimated audio signal (raw data) for the vocals source.
+    """ 
     # Convert mixture signal to tensor if needed
     if isinstance(item['mix_magnitude'], np.ndarray):
         item['mix_magnitude'] = torch.from_numpy(item['mix_magnitude']).float()
@@ -74,6 +84,13 @@ def process_audio(item, model):
     return vocals_estimate_audio
 
 def deployModel(model, test_data):
+    """
+    Utilize the given model to process audio data from the test data, saving the output audio files to disk.
+
+    Args:
+    model the model to use for processing and filtering audio data
+    test_data: the data to process, separate, and save to disk
+    """ 
     SAVE_WAV_FILE = True
     TEST_DATA_ITEM_INDEX = 4
 

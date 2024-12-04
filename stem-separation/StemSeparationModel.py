@@ -5,6 +5,15 @@ import torch
 from torch import nn
 
 class StemSeparationModel(nn.Module):
+    """
+    This class defines the neural net model architecture for our stem separation model.
+
+    The model includes the following components:
+    - AmplitudeToDB: Converts the input mixture audio to log amplitude
+    - BatchNorm: Normalizes the input mixture audio
+    - RecurrentStack: A stack of LSTM layers
+    - Embedding: A linear layer to generate the mask
+    """ 
     def __init__(self, num_features, num_audio_channels, hidden_size,
                  num_layers, bidirectional, dropout, num_sources, 
                 activation='sigmoid'):
