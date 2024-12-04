@@ -1,5 +1,5 @@
 # Imports and Setup
-from common import data, utils
+from common import data
 
 from tqdm import tqdm
 from pathlib import Path
