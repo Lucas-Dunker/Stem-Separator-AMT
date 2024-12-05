@@ -66,5 +66,3 @@ Without an abundance of accessible online resources, none of our work would have
   - [Stanford CS230 Project Report](https://cs230.stanford.edu/projects_spring_2020/reports/38948801.pdf)
   - [Wav2Mid GitHub Repository](https://github.com/jsleep/wav2mid)
   - [Final ArXiv Paper on Source Separation](https://arxiv.org/pdf/1710.11153)
-
-TODO - Include References From Proposal
