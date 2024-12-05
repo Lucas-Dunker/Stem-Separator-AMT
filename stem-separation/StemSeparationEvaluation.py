@@ -89,15 +89,17 @@ def evaluateModel(model, data, num_items, eval_path):
             "Vocals Mean", "Vocals Standard Deviation",
             "Accompaniment Mean", "Accompaniment Standard Deviation"]
 
+    colors = plt.cm.get_cmap('tab20', len(df["Metric"]))
+
     for i, metric in enumerate(metrics_groups):
-        axes[i].bar(df["Metric"], df[metric])
+        axes[i].bar(df["Metric"], df[metric], color=colors(range(len(df["Metric"]))))
         axes[i].set_title(f"{metric} Evaluation")
         axes[i].set_ylabel("Score")
         axes[i].set_xticklabels(df["Metric"], rotation=45, ha="right")
 
         # Save individual plots
         plt.figure()
-        plt.bar(df["Metric"], df[metric])
+        plt.bar(df["Metric"], df[metric], color=colors(range(len(df["Metric"]))))
         plt.title(f"{metric} Evaluation")
         plt.ylabel("Score")
         plt.xticks(rotation=45, ha="right")
