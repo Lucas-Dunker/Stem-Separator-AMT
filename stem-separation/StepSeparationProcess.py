@@ -166,8 +166,7 @@ def trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, va
     def close_pbar(engine):
         engine.state.pbar.close()
 
-    # Save the output relative to this notebook
-    output_folder = Path('.').absolute()
+    output_folder = "stem-separation/checkpoints"
 
     # Adding handlers from nussl that print out details about model training
     nussl.ml.train.add_stdout_handler(trainer, validator)
