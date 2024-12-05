@@ -53,4 +53,18 @@ A pipeline for midi generation can be ran from `midi_generation.py`. All relevan
 
 Without an abundance of accessible online resources, none of our work would have been possible. 
 
+  - [Source Separation Tutorial Landing Page](https://source-separation.github.io/tutorial/landing.html)
+  - [ArXiv Paper on Source Separation](https://arxiv.org/pdf/1810.11520)
+  - [ScienceDirect Article on Source Separation](https://www.sciencedirect.com/science/article/pii/S1877050920310152?via%3Dihub)
+  - [IJERT Research on Audio Stems Separation](https://www.ijert.org/research/audio-stems-separation-using-deep-learning-IJERTV10IS030074.pdf)
+  - [MUSDB Dataset for Source Separation](https://sigsep.github.io/datasets/musdb.html)
+  - [Seetharaman Paper on 2D Fourier Transform](https://pseeth.github.io/public/papers/seetharaman_2dft_waspaa2017.pdf)
+  - [Another ArXiv Paper on Source Separation](https://arxiv.org/pdf/1806.03185)
+  - [NUSSL GitHub Repository](https://github.com/nussl/nussl)
+  - [Tutorial on TF and Masking](https://source-separation.github.io/tutorial/basics/tf_and_masking.html)
+  - [Cal Poly Thesis on Source Separation](https://digitalcommons.calpoly.edu/cgi/viewcontent.cgi?article=3064&context=theses)
+  - [Stanford CS230 Project Report](https://cs230.stanford.edu/projects_spring_2020/reports/38948801.pdf)
+  - [Wav2Mid GitHub Repository](https://github.com/jsleep/wav2mid)
+  - [Final ArXiv Paper on Source Separation](https://arxiv.org/pdf/1710.11153)
+
 TODO - Include References From Proposal
