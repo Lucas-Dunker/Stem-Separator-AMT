@@ -10,11 +10,10 @@ class MusicTranscriber:
         self.bins_per_octave = bins_per_octave
         self.fs = sr / hop_length  # Frame rate for piano roll alignment
         # Calculate sequence_length based on 3 minutes duration
-        self.standard_duration = 180  # 3 minutes in seconds
+        self.standard_duration = 180 
         self.sequence_length = int(np.ceil(self.standard_duration * self.fs))  # Number of frames
 
     def process_audio(self, audio_path):
-        # Load audio file (up to 3 minutes)
         y, _ = librosa.load(audio_path, sr=self.sr, duration=self.standard_duration)
         # Compute CQT
         C = librosa.cqt(
@@ -36,12 +35,12 @@ class MusicTranscriber:
 
     def process_midi(self, midi_path):
         midi_data = pretty_midi.PrettyMIDI(midi_path)
-        end_time = self.standard_duration  # Use standard duration
+        end_time = self.standard_duration  
         # Generate time frames matching the spectrogram
         times = np.linspace(0, end_time, self.sequence_length)
         piano_roll = midi_data.get_piano_roll(fs=self.fs, times=times)
         # Restrict to MIDI note range 21–108 (88 keys)
-        piano_roll = piano_roll[21:109, :]  # MIDI note numbers 21–108 inclusive
+        piano_roll = piano_roll[21:109, :] 
         # Ensure fixed length
         if piano_roll.shape[1] < self.sequence_length:
             pad_width = ((0, 0), (0, self.sequence_length - piano_roll.shape[1]))

@@ -3,7 +3,6 @@ import numpy as np
 import tensorflow as tf
 from transcriber import MusicTranscriber
 import os
-from IPython.display import Audio, display
 import librosa
 
 print("TensorFlow version:", tf.__version__)
@@ -86,7 +85,6 @@ piano_roll = np.concatenate(predictions, axis=0)
 
 midi = piano_roll_to_midi(piano_roll, fs=43.06)
 midi.write('output.midi')
-
 
 output_folder = "transcriber/sampleaudio"
 os.makedirs(output_folder, exist_ok=True)
