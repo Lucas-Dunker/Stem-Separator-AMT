@@ -1,7 +1,24 @@
 # Audio Source Separation For Automatic Music Transcription
 
 ## Overview
-Source separation is the process of isolating individual sounds in an auditory mixture of multiple sounds, and has a variety of applications ranging from speech enhancement and lyric transcription to digital audio production for music. Furthermore, Automatic Music Transcription (AMT) is the process of converting raw music audio into sheet music readable by musicians. Historically, these tasks have faced challenges such as significant noise in audio, large training times, and lack of free-use data due to copyright restrictions. Recent developments in deep learning, however, have brought promising new approaches for constructing low-distortion stems and generating sheet music out of audio signals. Using spectrogram masking, deep neural networks, and the MuseScore API, we attempt to create an end-to-end pipeline that allows for an initial music audio mixture (e.g. .wav file) to be separated into instrument stems, converted into MIDI files, and transcribed into sheet music for each component instrument.
+Source separation is the process of isolating individual
+sounds in an auditory mixture of multiple sounds, and has
+a variety of applications ranging from speech enhancement
+and lyric transcription to digital audio production for
+music. Furthermore, Automatic Music Transcription (AMT)
+is the process of converting raw music audio into sheet music
+that musicians can read. Historically, these tasks have
+faced challenges such as significant audio noise, long training
+times, and lack of free-use data due to copyright restric-
+tions. However, recent developments in deep learning have
+brought new promising approaches to building low-distortion
+stems and generating sheet music from audio signals.
+Using spectrogram masking, deep neural networks, and the
+MuseScore API, we attempt to create an end-to-end pipeline
+that allows for an initial music audio mixture (e.g...wav file)
+to be separated into instrument stems, converted into MIDI
+files, and transcribed into sheet music for each component
+instrument.
 
 Created as a final project for CS5100, Foundations of Artificial Intelligence, at Northeastern University.
 
