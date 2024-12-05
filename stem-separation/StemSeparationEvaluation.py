@@ -3,6 +3,7 @@ import pandas as pd
 from collections import defaultdict
 import numpy as np
 import nussl
+import matplotlib.pyplot as plt
 
 from StemSeparationDeployment import process_audio
 
@@ -79,5 +80,33 @@ def evaluateModel(model, data, num_items, eval_path):
 
     
     df.to_csv(eval_path, index=False)
+
+    # Plot Results
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(20, 15))
+    axes = axes.flatten()
+
+    metrics_groups = [
+            "Vocals Mean", "Vocals Standard Deviation",
+            "Accompaniment Mean", "Accompaniment Standard Deviation"]
+
+    for i, metric in enumerate(metrics_groups):
+        axes[i].bar(df["Metric"], df[metric])
+        axes[i].set_title(f"{metric} Evaluation")
+        axes[i].set_ylabel("Score")
+        axes[i].set_xticklabels(df["Metric"], rotation=45, ha="right")
+
+        # Save individual plots
+        plt.figure()
+        plt.bar(df["Metric"], df[metric])
+        plt.title(f"{metric} Evaluation")
+        plt.ylabel("Score")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        plt.savefig(f"stem-separation/metrics/{metric.replace(' ', '_').lower()}_evaluation_plot.png")
+        plt.close()
+
+    plt.tight_layout()
+    plt.savefig("stem-separation/metrics/evaluation_plots.png")
+    plt.show()
     
     return df

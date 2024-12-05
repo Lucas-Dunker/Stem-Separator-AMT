@@ -49,11 +49,8 @@ if __name__ == '__main__':
     from StemSeparationDeployment import deployModel
     deployModel(model, test_data)
 
-
-    # Evaluate Model
+    # Evaluate Model & Plot Results
     from StemSeparationEvaluation import evaluateModel
     NUM_EVALUATION_ITEMS = len(test_data)
     eval_path = "stem-separation/metrics/eval_df.csv"
     evaluation_df = evaluateModel(model, test_data, NUM_EVALUATION_ITEMS, eval_path)
-
-    # TODO - plot and save evaluation results
