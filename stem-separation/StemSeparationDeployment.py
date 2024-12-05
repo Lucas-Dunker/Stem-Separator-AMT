@@ -83,18 +83,22 @@ def process_audio(item, model):
     
     return vocals_estimate_audio
 
-def deployModel(model, test_data):
+def deployModel(model, test_data, test_index = None):
     """
     Utilize the given model to process audio data from the test data, saving the output audio files to disk.
 
     Args:
     model the model to use for processing and filtering audio data
     test_data: the data to process, separate, and save to disk
+    input_file: the input file to process (if not using test data)
     """ 
     SAVE_WAV_FILE = True
-    TEST_DATA_ITEM_INDEX = 4
+    TEST_DATA_ITEM_INDEX = np.random.randint(len(test_data))
 
-    item = test_data[TEST_DATA_ITEM_INDEX]
+    if test_index is not None:
+        item = test_data[test_index]
+    else:
+        item = test_data[TEST_DATA_ITEM_INDEX]
     item['mix_magnitude'] = torch.from_numpy(item['mix_magnitude']).float()
     vocals_estimate_audio = process_audio(item, model)
     vocals_estimate_audio.embed_audio(display=False)
@@ -104,11 +108,13 @@ def deployModel(model, test_data):
     
     print('saving true mixture...')
     if SAVE_WAV_FILE:
-        scipy.io.wavfile.write(f"./stem-separation/outputs/test-{TEST_DATA_ITEM_INDEX}-mixture.wav", item['mix'].sample_rate, item['mix'].audio_data.T)
+        mix_audio_data = (item['mix'].audio_data * 32767).astype(np.int16) # Convert to 16-bit PCM
+        scipy.io.wavfile.write(f"./stem-separation/outputs/test-{TEST_DATA_ITEM_INDEX}-mixture.wav", item['mix'].sample_rate, mix_audio_data.T)
 
     for stem_label in item['sources'].keys():
         print(f"saving true {stem_label}...")
         if SAVE_WAV_FILE:
-            scipy.io.wavfile.write(f"./stem-separation/outputs/test-{TEST_DATA_ITEM_INDEX}-{stem_label}.wav", item['sources'][stem_label].sample_rate, item['sources'][stem_label].audio_data.T)
+            source_audio_data = (item['sources'][stem_label].audio_data * 32767).astype(np.int16) # Convert to 16-bit PCM
+            scipy.io.wavfile.write(f"./stem-separation/outputs/test-{TEST_DATA_ITEM_INDEX}-{stem_label}.wav", item['sources'][stem_label].sample_rate, source_audio_data.T)
 
     

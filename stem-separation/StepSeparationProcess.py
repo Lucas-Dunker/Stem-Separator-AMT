@@ -33,8 +33,7 @@ def prepareModel(train_folder, val_folder, test_folder):
     test_data: the test data for the model
     """ 
         
-    # TODO - change training set to a larger amount of the MUSDB18 dataset
-    data.prepare_musdb('~/.nussl/tutorial/')
+    data.prepare_musdb("./stem-separation/dataset")
 
     stft_params = nussl.STFTParams(window_length=512, hop_length=128, window_type='sqrt_hann')
 

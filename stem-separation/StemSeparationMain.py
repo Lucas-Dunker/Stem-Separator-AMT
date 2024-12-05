@@ -21,9 +21,9 @@ if __name__ == '__main__':
     # Prepare Data & Define Model
     from StepSeparationProcess import prepareModel
 
-    train_folder = "~/.nussl/tutorial/train"
-    val_folder = "~/.nussl/tutorial/valid"
-    test_folder = "~/.nussl/tutorial/test"
+    train_folder = "./stem-separation/dataset/train"
+    val_folder = "./stem-separation/dataset/valid"
+    test_folder = "./stem-separation/dataset/test"
 
     model, train_data, train_dataloader, val_dataloader, test_data = prepareModel(train_folder, val_folder, test_folder)
 
