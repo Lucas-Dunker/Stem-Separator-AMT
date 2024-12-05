@@ -74,9 +74,9 @@ def prepareModel(train_folder, val_folder, test_folder):
     num_features = stft_params.window_length // 2 + 1
     num_audio_channels = 1
     hidden_size = 50
-    num_layers = 2
+    num_layers = 3
     bidirectional = True
-    dropout = 0.3
+    dropout = 0.5
     num_sources = 1
     activation = 'sigmoid'
 
@@ -107,9 +107,8 @@ def trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, va
     train_dataloader: the training dataloader for the model
     val_dataloader: the validation dataloader for the model
     """ 
-
-    # TODO - tweak our training step to improve performance and accuracy (epochs, learning rate, loss function, etc.)
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)
     loss_fn = nussl.ml.train.loss.L1Loss()
 
     def train_step(engine, batch):

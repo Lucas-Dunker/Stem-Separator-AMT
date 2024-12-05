@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Train Model
     from StepSeparationProcess import trainModel
-    NUM_EPOCHS = 1
+    NUM_EPOCHS = 200
     EPOCH_LENGTH = 10
 
     model.verbose = False
