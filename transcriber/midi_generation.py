@@ -4,10 +4,24 @@ import tensorflow as tf
 from transcriber import MusicTranscriber
 import os
 from IPython.display import Audio, display
+import librosa
 
 print("TensorFlow version:", tf.__version__)
 
 transcriber = MusicTranscriber()
+
+
+def get_cqt(audio_path, sr=22050, hop_length=512, n_bins=84, bins_per_octave=12):
+    y, _ = librosa.load(audio_path, sr=sr)
+    C = librosa.cqt(
+        y,
+        sr=sr,
+        hop_length=hop_length,
+        n_bins=n_bins,
+        bins_per_octave=bins_per_octave
+    )
+    C_mag = librosa.amplitude_to_db(np.abs(C), ref=np.max)
+    return C_mag
 
 def segment_features(features, segment_length=512, hop_length=256):
     segments = []
@@ -53,8 +67,9 @@ def piano_roll_to_midi(piano_roll, fs=43.06, program=0, velocity=100):
     
     return midi
 
-audio_file =  'Data/gdrive/Track002.wav'
-cqt = transcriber.process_audio(audio_file)  
+audio_file =  'transcriber/sampleaudio/piano_resampled.wav'
+#cqt = transcriber.process_audio(audio_file)   # for > 3 min
+cqt = get_cqt(audio_file)
 
 cqt = np.expand_dims(cqt, axis=-1) 
 
@@ -65,7 +80,6 @@ segments = segment_features(cqt, segment_length=512, hop_length=256)
 model_path = 'transcriber/models/piano_transcriberF1.keras'
 model = tf.keras.models.load_model(model_path, compile=False)
 
-
 predictions = model.predict(segments)  
 
 piano_roll = np.concatenate(predictions, axis=0)  
@@ -74,14 +88,11 @@ midi = piano_roll_to_midi(piano_roll, fs=43.06)
 midi.write('output.midi')
 
 
-output_folder = "output_midi"
+output_folder = "transcriber/sampleaudio"
 os.makedirs(output_folder, exist_ok=True)
 output_path = os.path.join(output_folder, "output.midi")
 midi.write(output_path)
 
 print(f"MIDI file saved to {output_path}")
 
-from IPython.display import Audio
 print(f"Generated MIDI file: {output_path}")
-
-display(Audio("output_midi/output.midi", autoplay=True))
