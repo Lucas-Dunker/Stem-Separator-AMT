@@ -179,3 +179,6 @@ def trainModel(model, NUM_EPOCHS, EPOCH_LENGTH, train_data, train_dataloader, va
         epoch_length=EPOCH_LENGTH,
         max_epochs=NUM_EPOCHS,
     )
+
+    # Save the model
+    torch.save(model, f"stem-separation/checkpoints/{NUM_EPOCHS}-epochs/best.model.pth")
