@@ -40,6 +40,46 @@ This directory contains python files for creating, training, and deploying an Au
 
 Our AMT model works best with piano, as that was the majority of its training data. For more accurate results with the above stem separation model, it is recommend to retrain the model on note-labelled vocal data. 
 
+#### Configurations for AMT: 
+##### Dataset
+- **MAESTRO Dataset**: 47 audio-MIDI pairs were used due to resource constraints.
+
+##### Audio Processing
+| **Parameter**                 | **Value**            |
+|--------------------------------|----------------------|
+| Sample Rate (`sr`)             | 22050 Hz            |
+| Hop Length (`hop_length`)      | 512                 |
+| Number of Frequency Bins (`n_bins`) | 84             |
+| Bins Per Octave (`bins_per_octave`) | 12             |
+| Standard Audio Duration        | 180 seconds (3 minutes) |
+
+##### MIDI Processing
+| **Parameter**                 | **Value**            |
+|--------------------------------|----------------------|
+| Frame Rate (`fs`)              | Computed as `sr / hop_length` |
+| Pitch Range                    | 21 (A0) to 108 (C8) (88 piano keys) |
+| Piano Roll Resolution          | Binary values (1 for active, 0 for inactive) |
+
+##### Training
+| **Parameter**                 | **Value**            |
+|--------------------------------|----------------------|
+| Optimizer                     | Adam                |
+| Learning Rate                 | 1e-3                |
+| Loss Function                 | Custom Focal Loss   |
+| Alpha                         | 0.35                |
+| Gamma                         | 4.0                 |
+| Metrics                       | Precision, Recall, F1 Score (Note-wise and Frame-wise) |
+| Batch Size                    | 32                  |
+| Epochs                        | 50                  |
+| Early Stopping                | Patience: 5         |
+
+##### MIDI File Generation
+| **Parameter**                 | **Value**            |
+|--------------------------------|----------------------|
+| Program                       | 0 (Acoustic Piano)  |
+| Velocity                      | 100                 |
+| Frame Rate (`fs`)             | 43.06 frames/second |
+
 A pipeline for midi generation can be ran from `midi_generation.py`. All relevant dependencies can be found in `requirements.txt`.                                       
 
 ## Contributors
